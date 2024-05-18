@@ -621,13 +621,15 @@ class _CalendarState extends State<Calendar> {
   }
 
   Widget get eventList {
+    // If eventListBuilder is provided, use it to build the list of events to show.
+    // Otherwise use the default list of events.
     if (widget.eventListBuilder == null) {
-      return SizedBox(
-        height: 200, // 設置一個固定的高度
+      return Expanded(
         child: _selectedEvents != null && _selectedEvents!.isNotEmpty
+            // Create a list of events that are occurring on the currently selected day, if there are
+            // any. Otherwise, display an empty Container.
             ? ListView.builder(
                 padding: EdgeInsets.all(0.0),
-                shrinkWrap: true, // 設置 shrinkWrap 為 true
                 itemBuilder: (BuildContext context, int index) {
                   final NeatCleanCalendarEvent event = _selectedEvents![index];
                   final String start =
@@ -636,7 +638,7 @@ class _CalendarState extends State<Calendar> {
                       DateFormat('HH:mm').format(event.endTime).toString();
                   return Container(
                     height: widget.eventTileHeight ??
-                        MediaQuery.of(context).size.height * 0.06, // 調整事件項的高度
+                        MediaQuery.of(context).size.height * 0.08,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
@@ -660,6 +662,10 @@ class _CalendarState extends State<Calendar> {
                               padding: const EdgeInsets.all(4.0),
                               child: Container(
                                 decoration: BoxDecoration(
+                                  // If no image is provided, use the color of the event.
+                                  // If the event has set isDone to true, use the eventDoneColor
+                                  // gets used. If that eventDoneColor is not set, use the
+                                  // primaryColor of the theme.
                                   color: event.isDone
                                       ? widget.eventDoneColor ??
                                           Theme.of(context).primaryColor
@@ -680,36 +686,40 @@ class _CalendarState extends State<Calendar> {
                             flex: 60,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    event.summary,
-                                    maxLines: 1, // 限制摘要為一行
-                                    overflow: TextOverflow.ellipsis,
-                                    style:
-                                        Theme.of(context).textTheme.subtitle2,
-                                  ),
-                                  SizedBox(height: 5.0),
-                                  Text(
-                                    event.description,
-                                    maxLines: 2, // 限制描述為兩行
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                              child: SingleChildScrollView(
+                                // 使用 SingleChildScrollView 包裹 Column
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(event.summary,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Text(
+                                      event.description,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
+                          // This Expanded widget gets used to display the start and end time of the
+                          // event.
                           Expanded(
                             flex: 30,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
+                              // If the event is all day, then display the word "All day" with no time.
                               child: event.isAllDay || event.isMultiDay
                                   ? allOrMultiDayDayTimeWidget(event)
                                   : singleDayTimeWidget(start, end),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -720,23 +730,27 @@ class _CalendarState extends State<Calendar> {
             : Container(),
       );
     } else {
+      // eventListBuilder is not null
       return widget.eventListBuilder!(context, _selectedEvents!);
     }
   }
 
-  Column singleDayTimeWidget(String start, String end) {
+  SingleChildScrollView singleDayTimeWidget(String start, String end) {
     print('SingleDayEvent');
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(start, style: Theme.of(context).textTheme.bodyText1),
-        Text(end, style: Theme.of(context).textTheme.bodyText1),
-      ],
+    return SingleChildScrollView(
+      // 使用 SingleChildScrollView 包裹 Column
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(start, style: Theme.of(context).textTheme.bodyText1),
+          Text(end, style: Theme.of(context).textTheme.bodyText1),
+        ],
+      ),
     );
   }
 
-  Column allOrMultiDayDayTimeWidget(NeatCleanCalendarEvent event) {
+  Widget allOrMultiDayDayTimeWidget(NeatCleanCalendarEvent event) {
     print('=== Summary: ${event.summary}');
     String start = DateFormat('HH:mm').format(event.startTime).toString();
     String end = DateFormat('HH:mm').format(event.endTime).toString();
@@ -769,13 +783,23 @@ class _CalendarState extends State<Calendar> {
       start = widget.allDayEventText;
       end = '';
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(start, style: Theme.of(context).textTheme.bodyText1),
-        Text(end, style: Theme.of(context).textTheme.bodyText1),
-      ],
+    // return Column(
+    //   crossAxisAlignment: CrossAxisAlignment.end,
+    //   mainAxisAlignment: MainAxisAlignment.center,
+    //   children: [
+    //     Text(start, style: Theme.of(context).textTheme.bodyText1),
+    //     Text(end, style: Theme.of(context).textTheme.bodyText1),
+    //   ],
+    // );
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(start, style: Theme.of(context).textTheme.bodyText1),
+          Text(end, style: Theme.of(context).textTheme.bodyText1),
+        ],
+      ),
     );
   }
 
