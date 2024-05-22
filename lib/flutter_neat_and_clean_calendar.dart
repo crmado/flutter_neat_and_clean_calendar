@@ -310,6 +310,7 @@ class _CalendarState extends State<Calendar> {
     var leftArrow;
     var rightArrow;
     var jumpDateIcon;
+    var expandCalendar;
 
     if (!widget.hideArrows) {
       leftArrow = PlatformIconButton(
@@ -326,10 +327,12 @@ class _CalendarState extends State<Calendar> {
     }
 
     if (!widget.hideTodayIcon) {
-      todayIcon = GestureDetector(
-        child: Text(widget.todayButtonText),
-        onTap: resetToToday,
-      );
+      // todayIcon = GestureDetector(
+      //   child:
+      //       Text(widget.todayButtonText, style: TextStyle(color: Colors.white)),
+      //   onTap: resetToToday,
+      // );
+      debugPrint('widget.todayButtonText: ${widget.todayButtonText}');
     } else {
       todayIcon = Container();
     }
@@ -416,6 +419,23 @@ class _CalendarState extends State<Calendar> {
       jumpDateIcon = Container();
     }
 
+    if (widget.isExpandable) {
+      expandCalendar = Padding(
+        padding: EdgeInsets.all(8.0), // 設定你想要的間距
+        child: GestureDetector(
+          child: Icon(isExpanded
+              ? Icons.calendar_view_day_rounded
+              : Icons.calendar_view_day),
+          onTap: toggleExpanded,
+        ),
+      );
+    } else {
+      expandCalendar = Padding(
+        padding: EdgeInsets.all(8.0), // 設定你想要的間距
+        child: Container(),
+      );
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -429,11 +449,13 @@ class _CalendarState extends State<Calendar> {
                 style: widget.displayMonthTextStyle ??
                     TextStyle(
                       fontSize: 20.0,
+                      color: Colors.white,
                     ),
               ),
             ],
           ),
         ),
+        expandCalendar ?? Container(),
         jumpDateIcon ?? Container(),
         rightArrow ?? Container(),
       ],
@@ -559,7 +581,7 @@ class _CalendarState extends State<Calendar> {
 
   TextStyle? configureDateStyle(monthStarted, monthEnded) {
     TextStyle? dateStyles;
-    final TextStyle? body1Style = Theme.of(context).textTheme.bodyText2;
+    final TextStyle? body1Style = Theme.of(context).textTheme.bodySmall;
 
     if (isExpanded) {
       final TextStyle body1StyleDisabled = body1Style!.copyWith(
@@ -594,7 +616,8 @@ class _CalendarState extends State<Calendar> {
               Text(
                 DateFormat(widget.expandableDateFormat, widget.locale)
                     .format(_selectedDate),
-                style: widget.bottomBarTextStyle ?? TextStyle(fontSize: 13),
+                style: widget.bottomBarTextStyle ??
+                    TextStyle(fontSize: 13, color: Colors.white),
               ),
               PlatformIconButton(
                 onPressed: toggleExpanded,
@@ -692,10 +715,15 @@ class _CalendarState extends State<Calendar> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(event.summary,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2),
+                                    Text(
+                                      event.summary,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            color: Colors.white, // 修改這裡的顏色
+                                          ),
+                                    ),
                                     SizedBox(
                                       height: 10.0,
                                     ),
@@ -743,8 +771,8 @@ class _CalendarState extends State<Calendar> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(start, style: Theme.of(context).textTheme.bodyText1),
-          Text(end, style: Theme.of(context).textTheme.bodyText1),
+          Text(start, style: Theme.of(context).textTheme.bodySmall),
+          Text(end, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
@@ -762,7 +790,7 @@ class _CalendarState extends State<Calendar> {
         children: [
           Text(
             widget.allDayEventText,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       );
@@ -796,8 +824,8 @@ class _CalendarState extends State<Calendar> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(start, style: Theme.of(context).textTheme.bodyText1),
-          Text(end, style: Theme.of(context).textTheme.bodyText1),
+          Text(start, style: Theme.of(context).textTheme.bodySmall),
+          Text(end, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
@@ -832,7 +860,7 @@ class _CalendarState extends State<Calendar> {
             expanded: calendarGridView,
             isExpanded: isExpanded,
           ),
-          expansionButtonRow,
+          // expansionButtonRow,
           if (widget.showEvents) eventList
         ],
       ),
