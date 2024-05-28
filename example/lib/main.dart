@@ -35,6 +35,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           DateTime.now().year, DateTime.now().month, DateTime.now().day, 12, 0),
       description: 'A special event',
       color: Colors.blue[700],
+      id: '1',
     ),
   ];
 
@@ -48,19 +49,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
           DateTime.now().day + 2, 12, 0),
       color: Colors.orange,
       isMultiDay: true,
+      id: '2',
     ),
     NeatCleanCalendarEvent(
       'Event X',
-        description: 'test desc',
-        startTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 10, 30),
-        endTime: DateTime(DateTime.now().year, DateTime.now().month,
-            DateTime.now().day, 11, 30),
-        color: Colors.lightGreen,
-        isAllDay: false,
-        isDone: true,
-        icon: 'assets/event1.jpg',
-        wide: false),
+      description: 'test desc',
+      startTime: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 10, 30),
+      endTime: DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 11, 30),
+      color: Colors.lightGreen,
+      isAllDay: false,
+      isDone: true,
+      icon: 'assets/event1.jpg',
+      wide: false,
+      id: '3',
+    ),
     NeatCleanCalendarEvent(
       'Allday Event B',
       description: 'test desc',
@@ -70,8 +74,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
           DateTime.now().day + 2, 17, 0),
       color: Colors.pink,
       isAllDay: true,
-        icon: 'assets/event1.jpg',
-        wide: false
+      icon: 'assets/event1.jpg',
+      wide: false,
+      id: '4',
     ),
     NeatCleanCalendarEvent(
       'Normal Event D',
@@ -83,6 +88,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       color: Colors.indigo,
       wide: true,
       icon: 'assets/events.jpg',
+      id: '5',
     ),
     NeatCleanCalendarEvent(
       'Normal Event E',
@@ -94,6 +100,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       color: Colors.indigo,
       wide: true,
       icon: 'assets/profile.jpg',
+      id: '6',
     ),
   ];
 

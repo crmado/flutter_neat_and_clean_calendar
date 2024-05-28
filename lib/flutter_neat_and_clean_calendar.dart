@@ -181,7 +181,12 @@ class Calendar extends StatefulWidget {
     this.datePickerConfig,
     this.eventTileHeight,
     this.showEvents = true,
+    this.onTap,
+    this.onAddCalendar,
   });
+
+  final VoidCallback? onTap;
+  final VoidCallback? onAddCalendar;
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -285,7 +290,8 @@ class _CalendarState extends State<Calendar> {
                     event.startTime.month,
                     event.startTime.day + i,
                     event.endTime.hour,
-                    event.endTime.minute));
+                    event.endTime.minute),
+                id: '');
             if (i == 0) {
               // First day of the event.
               newEvent.multiDaySegement = MultiDaySegement.first;
@@ -460,404 +466,15 @@ class _CalendarState extends State<Calendar> {
       );
     }
 
-    if (widget.datePickerType != null &&
-        widget.datePickerType != DatePickerType.hidden) {
-      addCalendar = GestureDetector(
-        child: Icon(Icons.date_range_outlined),
-        onTap: () {
-          if (widget.datePickerType == DatePickerType.year) {
-            // show year picker
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  YearPicker(
-                    firstDate: widget.datePickerConfig?.firstDate ??
-                        DateTime(DateTime.now().year - 100, 1),
-                    lastDate: widget.datePickerConfig?.lastDate ??
-                        DateTime(DateTime.now().year + 100, 1),
-                    initialDate:
-                        widget.datePickerConfig?.initialDate ?? DateTime.now(),
-                    // save the selected date to _selectedDate DateTime variable.
-                    // It's used to set the previous selected date when
-                    // re-showing the dialog.
-                    selectedDate: _selectedDate,
-                    onChanged: (DateTime dateTime) {
-                      // close the dialog when year is selected.
-                      onJumpToDateSelected(dateTime);
-                      Navigator.pop(context);
-
-                      // Do something with the dateTime selected.
-                      // Remember that you need to use dateTime.year to get the year
-                    },
-                  ),
-                ],
-              ),
-            );
-          } else if (widget.datePickerType == DatePickerType.date) {
-            double screenWidth = MediaQuery.of(context).size.width; // 獲取螢幕寬度
-            double screenHeight = MediaQuery.of(context).size.height; // 獲取螢幕高度
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) {
-                return Container(
-                  height: screenHeight * 0.9, // 這裡設定高度為螢幕高度的 90%
-                  color: Colors.black, // 這裡設定背景顏色為黑色
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.white, // 這裡設定條狀物的顏色為白色
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                      ),
-                      SizedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            IconButton(
-                              icon: const Text('取消',
-                                  style: TextStyle(color: Color(0xFFA8D8F0))),
-                              onPressed: () {
-                                debugPrint('點擊關閉添加待辦事項按鈕');
-                                // 清空輸入框
-                                _titleController.clear();
-                                _descriptionController.clear();
-                                Navigator.pop(context); // 關閉對話框
-                              },
-                              color: const Color(0xFFA8D8F0),
-                            ),
-                            const Text(
-                              '添加行事曆',
-                              style: TextStyle(
-                                color: Colors.white, // 這裡設定字體顏色為白色
-                                fontSize: 20,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Text('加入',
-                                  style: TextStyle(color: Color(0xFFA8D8F0))),
-                              onPressed: () {
-                                debugPrint('點擊保存待辦事項按鈕');
-                                debugPrint('標題: ${_titleController.text}');
-                                debugPrint(
-                                    '描述: ${_descriptionController.text}');
-                                // 清空輸入框
-                                _titleController.clear();
-                                _descriptionController.clear();
-                                Navigator.pop(context); // 關閉對話框
-                              },
-                              color: const Color(0xFFA8D8F0),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: screenWidth * 0.95,
-                        height: screenHeight * 0.20,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF526D7A).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1, // 這裡設定比例為 1
-                                child: TextField(
-                                  controller: _titleController,
-                                  decoration: InputDecoration(
-                                    hintText: '輸入標題',
-                                    hintStyle: TextStyle(
-                                        color: Colors.white.withOpacity(0.5)),
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    border: InputBorder.none,
-                                  ),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              //分割線
-                              Container(
-                                width: screenWidth * 0.9,
-                                height: 1,
-                                color: Colors.white30,
-                              ),
-                              Expanded(
-                                flex: 4, // 這裡設定比例為 4
-                                child: TextField(
-                                  controller: _descriptionController,
-                                  decoration: InputDecoration(
-                                    hintText: '輸入描述',
-                                    hintStyle: TextStyle(
-                                        color: Colors.white.withOpacity(0.5)),
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    border: InputBorder.none,
-                                  ),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: screenWidth * 0.95,
-                        height: screenHeight * 0.30,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF526D7A).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              // 起始時間
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    // 顯示日期選擇器對話框
-                                    DateTime? selectedDate =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate:
-                                          DateTime(DateTime.now().year - 5),
-                                      lastDate:
-                                          DateTime(DateTime.now().year + 5),
-                                    );
-
-                                    // 如果使用者選擇了日期，則顯示時間選擇器對話框
-                                    if (selectedDate != null) {
-                                      // 顯示時間選擇器對話框
-                                      TimeOfDay? selectedTime =
-                                          await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      );
-
-                                      // 如果使用者選擇了時間，則更新 _startTimeController 的值
-                                      if (selectedTime != null) {
-                                        _startTimeController.text =
-                                            '${DateFormat('yyyy-MM-dd').format(selectedDate)} ${selectedTime.format(context)}';
-                                      }
-                                    }
-                                  },
-                                  child: AbsorbPointer(
-                                    child: TextField(
-                                      controller: _startTimeController,
-                                      decoration: InputDecoration(
-                                        hintText: '輸入起始時間',
-                                        hintStyle: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5)),
-                                        labelStyle:
-                                            TextStyle(color: Colors.white),
-                                        border: InputBorder.none,
-                                      ),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //分割線
-                              Container(
-                                width: screenWidth * 0.9,
-                                height: 1,
-                                color: Colors.white30,
-                              ),
-                              // 結束時間
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    // 顯示日期選擇器對話框
-                                    DateTime? selectedDate =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate:
-                                          DateTime(DateTime.now().year - 5),
-                                      lastDate:
-                                          DateTime(DateTime.now().year + 5),
-                                    );
-
-                                    // 如果使用者選擇了日期，則顯示時間選擇器對話框
-                                    if (selectedDate != null) {
-                                      // 顯示時間選擇器對話框
-                                      TimeOfDay? selectedTime =
-                                          await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      );
-
-                                      // 如果使用者選擇了時間，則更新 _endTimeController 的值
-                                      if (selectedTime != null) {
-                                        _endTimeController.text =
-                                            '${DateFormat('yyyy-MM-dd').format(selectedDate)} ${selectedTime.format(context)}';
-                                      }
-                                    }
-                                  },
-                                  child: AbsorbPointer(
-                                    child: TextField(
-                                      controller: _endTimeController,
-                                      decoration: InputDecoration(
-                                        hintText: '輸入結束時間',
-                                        hintStyle: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5)),
-                                        labelStyle:
-                                            TextStyle(color: Colors.white),
-                                        border: InputBorder.none,
-                                      ),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //分割線
-                              Container(
-                                width: screenWidth * 0.9,
-                                height: 1,
-                                color: Colors.white30,
-                              ),
-                              // 標籤顏色
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('選擇一個顏色'),
-                                          content: Container(
-                                            width: double.maxFinite,
-                                            height: 500,
-                                            child: GridView.count(
-                                              crossAxisCount: 2,
-                                              children: <Widget>[
-                                                ...List.generate(colors.length,
-                                                    (index) {
-                                                  // 修改這裡，確保不超出 colors 陣列的長度
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      setState(() {
-                                                        _tagColorController
-                                                                .text =
-                                                            colors[index]
-                                                                .toString();
-                                                      });
-                                                    },
-                                                    child: Container(
-                                                      color: colors[index],
-                                                    ),
-                                                  );
-                                                }),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: AbsorbPointer(
-                                    child: TextField(
-                                      controller: _tagColorController,
-                                      decoration: InputDecoration(
-                                        hintText: '輸入標籤顏色',
-                                        hintStyle: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5)),
-                                        labelStyle:
-                                            TextStyle(color: Colors.white),
-                                        border: InputBorder.none,
-                                      ),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //分割線
-                              Container(
-                                width: screenWidth * 0.9,
-                                height: 1,
-                                color: Colors.white30,
-                              ),
-                              // 提前提醒時間
-                              Expanded(
-                                flex: 1,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          height: 200,
-                                          child: CupertinoPicker(
-                                            itemExtent: 30,
-                                            onSelectedItemChanged: (int index) {
-                                              _reminderTimeController.text =
-                                                  '${index * 5} 分鐘';
-                                            },
-                                            children: List<Widget>.generate(13,
-                                                (int index) {
-                                              return Center(
-                                                  child:
-                                                      Text('${index * 5} 分鐘'));
-                                            }),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: AbsorbPointer(
-                                    child: TextField(
-                                      controller: _reminderTimeController,
-                                      decoration: InputDecoration(
-                                        hintText: '設定提前提醒時間',
-                                        hintStyle: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5)),
-                                        labelStyle:
-                                            TextStyle(color: Colors.white),
-                                        border: InputBorder.none,
-                                      ),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          }
-        },
-      );
-    } else {
-      addCalendar = Container();
-    }
+    addCalendar = widget.onAddCalendar != null
+        ? InkWell(
+            child: Icon(
+              Icons.date_range_outlined,
+              color: Colors.white,
+            ),
+            onTap: widget.onAddCalendar,
+          )
+        : Container();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -886,29 +503,51 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
-  Widget get calendarGridView {
-    return Container(
-      child: SimpleGestureDetector(
-        onSwipeUp: _onSwipeUp,
-        onSwipeDown: _onSwipeDown,
-        onSwipeLeft: _onSwipeLeft,
-        onSwipeRight: _onSwipeRight,
-        swipeConfig: SimpleSwipeConfig(
-          verticalThreshold: 10.0,
-          horizontalThreshold: 40.0,
-          swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
-        ),
-        child: Column(
-          children: <Widget>[
-            GridView.count(
-              childAspectRatio: 1.5,
-              primary: false,
-              shrinkWrap: true,
-              crossAxisCount: 7,
-              padding: EdgeInsets.only(bottom: 0.0),
-              children: calendarBuilder(),
+  Widget get addCalendar {
+    return widget.onAddCalendar != null
+        ? InkWell(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
             ),
-          ],
+            onTap: widget.onAddCalendar,
+          )
+        : Container(
+            child: Icon(
+              Icons.add,
+              color: Colors.grey,
+              size: 30,
+            ),
+          );
+  }
+
+  Widget get calendarGridView {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: Container(
+        child: SimpleGestureDetector(
+          onSwipeUp: _onSwipeUp,
+          onSwipeDown: _onSwipeDown,
+          onSwipeLeft: _onSwipeLeft,
+          onSwipeRight: _onSwipeRight,
+          swipeConfig: SimpleSwipeConfig(
+            verticalThreshold: 10.0,
+            horizontalThreshold: 40.0,
+            swipeDetectionMoment: SwipeDetectionMoment.onUpdate,
+          ),
+          child: Column(
+            children: <Widget>[
+              GridView.count(
+                childAspectRatio: 1.5,
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 7,
+                padding: EdgeInsets.only(bottom: 0.0),
+                children: calendarBuilder(),
+              ),
+            ],
+          ),
         ),
       ),
     );

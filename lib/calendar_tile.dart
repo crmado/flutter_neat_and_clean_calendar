@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neat_and_clean_calendar/provider_image.dart';
+
 // import 'package:flutter_neat_and_clean_calendar/platform_widgets.dart';
 import './date_utils.dart';
 import './neat_and_clean_calendar_event.dart';
@@ -210,6 +211,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
           '',
           startTime: this.date!,
           endTime: this.date!,
+          id: '',
         ),
       )
       .icon;
