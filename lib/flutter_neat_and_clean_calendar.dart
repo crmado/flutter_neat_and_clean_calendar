@@ -453,17 +453,17 @@ class _CalendarState extends State<Calendar> {
 
     if (widget.isExpandable) {
       expandCalendar = Padding(
-        padding: EdgeInsets.all(8.0), // 設定你想要的間距
+        padding: EdgeInsets.all(10.0), // 設定你想要的間距
         child: GestureDetector(
           child: Icon(isExpanded
-              ? Icons.arrow_drop_down_sharp
-              : Icons.arrow_drop_up_sharp),
+              ? Icons.arrow_drop_up_sharp
+              : Icons.arrow_drop_down_sharp),
           onTap: toggleExpanded,
         ),
       );
     } else {
       expandCalendar = Padding(
-        padding: EdgeInsets.all(8.0), // 設定你想要的間距
+        padding: EdgeInsets.all(10.0), // 設定你想要的間距
         child: Container(),
       );
     }
@@ -498,6 +498,7 @@ class _CalendarState extends State<Calendar> {
                         color: Colors.white,
                       ),
                 ),
+                SizedBox(width: 10),
                 expandCalendar ?? Container(),
               ],
             ),
