@@ -20,7 +20,7 @@ class NeatCleanCalendarEvent {
   Map<String, dynamic>? metadata;
   String? icon;
   bool? wide = false;
-  final String id;
+  late final String id;
 
   NeatCleanCalendarEvent(
     this.summary, {
