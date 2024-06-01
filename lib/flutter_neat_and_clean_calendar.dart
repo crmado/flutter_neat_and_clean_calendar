@@ -504,8 +504,8 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
         ),
-        // jumpDateIcon ?? Container(),
-        addCalendar ?? Container(),
+        jumpDateIcon ?? Container(),
+        // addCalendar ?? Container(),
         rightArrow ?? Container(),
       ],
     );
