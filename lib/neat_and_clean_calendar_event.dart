@@ -38,4 +38,42 @@ class NeatCleanCalendarEvent {
     this.wide,
     required this.id,
   });
+
+  factory NeatCleanCalendarEvent.fromMap(Map<String, dynamic> data) {
+    final colorString = data['color'] as String;
+    final color =
+        Color(int.parse(colorString.substring(1, 7), radix: 16) + 0xFF000000);
+
+    return NeatCleanCalendarEvent(data['summary'],
+        description: data['description'],
+        location: data['location'],
+        startTime: DateTime.fromMillisecondsSinceEpoch(data['startTime']),
+        endTime: DateTime.fromMillisecondsSinceEpoch(data['endTime']),
+        color: color,
+        isAllDay: data['isAllDay'],
+        isMultiDay: data['isMultiDay'],
+        isDone: data['isDone'],
+        metadata: data['metadata'],
+        icon: data['icon'],
+        wide: data['wide'],
+        id: data['id']);
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'summary': summary,
+      'description': description,
+      'location': location,
+      'startTime': startTime.millisecondsSinceEpoch,
+      'endTime': endTime.millisecondsSinceEpoch,
+      'color': '#${color!.value.toRadixString(16).substring(2)}',
+      'isAllDay': isAllDay,
+      'isMultiDay': isMultiDay,
+      'multiDaySegement': multiDaySegement?.toString().split('.').last,
+      'isDone': isDone,
+      'metadata': metadata,
+      'icon': icon,
+      'wide': wide,
+      'id': id,
+    };
+  }
 }
