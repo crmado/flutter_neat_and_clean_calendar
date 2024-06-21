@@ -21,8 +21,9 @@ class NeatCleanCalendarEvent {
   String? icon;
   bool? wide = false;
   late final String id;
-  final String googleCalendarEventId;
+  late final String googleCalendarEventId;
   final String source;
+  bool? googleCalendarDeleteStatus;
 
   NeatCleanCalendarEvent(
     this.summary, {
@@ -41,6 +42,7 @@ class NeatCleanCalendarEvent {
     required this.id,
     required this.googleCalendarEventId,
     this.source = 'self',
+    this.googleCalendarDeleteStatus = false,
   });
 
   factory NeatCleanCalendarEvent.fromMap(Map<String, dynamic> data) {
@@ -62,7 +64,8 @@ class NeatCleanCalendarEvent {
         wide: data['wide'],
         id: data['id'],
         googleCalendarEventId: data['googleCalendarEventId'],
-        source: data['source']);
+        source: data['source'],
+        googleCalendarDeleteStatus: data['googleCalendarDeleteStatus']);
   }
 
   Map<String, dynamic> toMap() {
@@ -83,6 +86,7 @@ class NeatCleanCalendarEvent {
       'id': id,
       'googleCalendarEventId': googleCalendarEventId,
       'source': source,
+      'googleCalendarDeleteStatus': googleCalendarDeleteStatus,
     };
   }
 
@@ -105,6 +109,17 @@ class NeatCleanCalendarEvent {
       'id': id,
       'googleCalendarEventId': googleCalendarEventId,
       'source': source,
+      'googleCalendarDeleteStatus': googleCalendarDeleteStatus,
     };
+  }
+
+  static empty() {
+    return NeatCleanCalendarEvent('',
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        id: '',
+        googleCalendarEventId: '',
+        source: 'self',
+        isAllDay: false);
   }
 }
