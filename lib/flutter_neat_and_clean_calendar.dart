@@ -293,7 +293,8 @@ class _CalendarState extends State<Calendar> {
                     event.startTime.day + i,
                     event.endTime.hour,
                     event.endTime.minute),
-                id: '${event.id}');
+                id: '${event.id}',
+                googleCalendarEventId: event.googleCalendarEventId);
             if (i == 0) {
               // First day of the event.
               newEvent.multiDaySegement = MultiDaySegement.first;
@@ -455,9 +456,12 @@ class _CalendarState extends State<Calendar> {
       expandCalendar = Padding(
         padding: EdgeInsets.all(10.0), // 設定你想要的間距
         child: GestureDetector(
-          child: Icon(isExpanded
-              ? Icons.arrow_drop_up_sharp
-              : Icons.arrow_drop_down_sharp),
+          child: Icon(
+            isExpanded
+                ? Icons.arrow_drop_up_sharp
+                : Icons.arrow_drop_down_sharp,
+            size: 30,
+          ),
           onTap: toggleExpanded,
         ),
       );

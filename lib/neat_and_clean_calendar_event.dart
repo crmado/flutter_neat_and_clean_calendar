@@ -21,6 +21,8 @@ class NeatCleanCalendarEvent {
   String? icon;
   bool? wide = false;
   late final String id;
+  final String googleCalendarEventId;
+  final String source;
 
   NeatCleanCalendarEvent(
     this.summary, {
@@ -37,6 +39,8 @@ class NeatCleanCalendarEvent {
     this.icon,
     this.wide,
     required this.id,
+    required this.googleCalendarEventId,
+    this.source = 'self',
   });
 
   factory NeatCleanCalendarEvent.fromMap(Map<String, dynamic> data) {
@@ -56,8 +60,11 @@ class NeatCleanCalendarEvent {
         metadata: data['metadata'],
         icon: data['icon'],
         wide: data['wide'],
-        id: data['id']);
+        id: data['id'],
+        googleCalendarEventId: data['googleCalendarEventId'],
+        source: data['source']);
   }
+
   Map<String, dynamic> toMap() {
     return {
       'summary': summary,
@@ -74,6 +81,30 @@ class NeatCleanCalendarEvent {
       'icon': icon,
       'wide': wide,
       'id': id,
+      'googleCalendarEventId': googleCalendarEventId,
+      'source': source,
+    };
+  }
+
+  // 新增的 toJson 方法
+  Map<String, dynamic> toJson() {
+    return {
+      'summary': summary,
+      'description': description,
+      'location': location,
+      'startTime': startTime.millisecondsSinceEpoch,
+      'endTime': endTime.millisecondsSinceEpoch,
+      'color': '#${color!.value.toRadixString(16).substring(2)}',
+      'isAllDay': isAllDay,
+      'isMultiDay': isMultiDay,
+      'multiDaySegement': multiDaySegement?.toString().split('.').last,
+      'isDone': isDone,
+      'metadata': metadata,
+      'icon': icon,
+      'wide': wide,
+      'id': id,
+      'googleCalendarEventId': googleCalendarEventId,
+      'source': source,
     };
   }
 }

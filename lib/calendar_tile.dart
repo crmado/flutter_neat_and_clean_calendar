@@ -212,6 +212,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
           startTime: this.date!,
           endTime: this.date!,
           id: '',
+          googleCalendarEventId: '',
         ),
       )
       .icon;

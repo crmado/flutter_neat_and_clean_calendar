@@ -36,6 +36,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       description: 'A special event',
       color: Colors.blue[700],
       id: '1',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
   ];
 
@@ -50,6 +51,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       color: Colors.orange,
       isMultiDay: true,
       id: '2',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
     NeatCleanCalendarEvent(
       'Event X',
@@ -64,6 +66,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       icon: 'assets/event1.jpg',
       wide: false,
       id: '3',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
     NeatCleanCalendarEvent(
       'Allday Event B',
@@ -77,6 +80,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       icon: 'assets/event1.jpg',
       wide: false,
       id: '4',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
     NeatCleanCalendarEvent(
       'Normal Event D',
@@ -89,6 +93,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       wide: true,
       icon: 'assets/events.jpg',
       id: '5',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
     NeatCleanCalendarEvent(
       'Normal Event E',
@@ -101,6 +106,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       wide: true,
       icon: 'assets/profile.jpg',
       id: '6',
+      googleCalendarEventId: String.fromEnvironment('googleCalendarEventId'),
     ),
   ];
 
