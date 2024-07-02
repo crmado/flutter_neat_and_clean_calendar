@@ -206,7 +206,7 @@ class NeatCleanCalendarTile extends StatelessWidget {
 
   String? get icon => events!
       .firstWhere(
-        (element) => Utils.isSameDay(this.date!, element.startTime),
+        (element) => Utils.isSameDay(this.date!, element.startTime as DateTime),
         orElse: () => NeatCleanCalendarEvent(
           '',
           startTime: this.date!,
