@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum MultiDaySegement {
   first,
@@ -50,11 +51,20 @@ class NeatCleanCalendarEvent {
     final color =
         Color(int.parse(colorString.substring(1, 7), radix: 16) + 0xFF000000);
 
+    DateTime parseDateTime(dynamic value) {
+      if (value is Timestamp) {
+        return value.toDate();
+      } else if (value is String) {
+        return DateTime.parse(value);
+      }
+      throw ArgumentError('Unsupported datetime type: ${value.runtimeType}');
+    }
+
     return NeatCleanCalendarEvent(data['summary'],
         description: data['description'],
         location: data['location'],
-        startTime: DateTime.parse(data['startTime']),
-        endTime: DateTime.parse(data['endTime']),
+        startTime: parseDateTime(data['startTime']),
+        endTime: parseDateTime(data['endTime']),
         color: color,
         isAllDay: data['isAllDay'],
         isMultiDay: data['isMultiDay'],
@@ -73,8 +83,8 @@ class NeatCleanCalendarEvent {
       'summary': summary,
       'description': description,
       'location': location,
-      'startTime': startTime.toString(),
-      'endTime': endTime.toString(),
+      'startTime': startTime.toIso8601String(),
+      'endTime': endTime.toIso8601String(),
       'color': '#${color!.value.toRadixString(16).substring(2)}',
       'isAllDay': isAllDay,
       'isMultiDay': isMultiDay,
@@ -96,8 +106,8 @@ class NeatCleanCalendarEvent {
       'summary': summary,
       'description': description,
       'location': location,
-      'startTime': startTime.toString(),
-      'endTime': endTime.toString(),
+      'startTime': startTime.toIso8601String(),
+      'endTime': endTime.toIso8601String(),
       'color': '#${color!.value.toRadixString(16).substring(2)}',
       'isAllDay': isAllDay,
       'isMultiDay': isMultiDay,
