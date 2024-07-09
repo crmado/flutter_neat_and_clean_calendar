@@ -21,8 +21,8 @@ class NeatCleanCalendarEvent {
   Map<String, dynamic>? metadata;
   String? icon;
   bool? wide = false;
-  late final String id;
-  late final String googleCalendarEventId;
+  String id;
+  String googleCalendarEventId;
   final String source;
   bool? googleCalendarDeleteStatus;
 
@@ -132,4 +132,15 @@ class NeatCleanCalendarEvent {
         source: 'self',
         isAllDay: false);
   }
+
+  // 添加一个更新 ID 的方法
+  void updateId(String newId) {
+    id = newId;
+  }
+
+  // 添加一个更新 googleCalendarEventId 的方法
+  void updateGoogleCalendarEventId(String newId) {
+    googleCalendarEventId = newId;
+  }
+
 }
