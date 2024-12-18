@@ -65,7 +65,7 @@ class NeatCleanCalendarEvent {
         location: data['location'],
         startTime: parseDateTime(data['startTime']),
         endTime: parseDateTime(data['endTime']),
-        color: color,
+        // color: color,
         isAllDay: data['isAllDay'],
         isMultiDay: data['isMultiDay'],
         isDone: data['isDone'],
@@ -85,7 +85,7 @@ class NeatCleanCalendarEvent {
       'location': location,
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
-      'color': '#${color!.value.toRadixString(16).substring(2)}',
+      // 'color': '#${color!.value.toRadixString(16).substring(2)}',
       'isAllDay': isAllDay,
       'isMultiDay': isMultiDay,
       'multiDaySegement': multiDaySegement?.toString().split('.').last,
@@ -142,5 +142,4 @@ class NeatCleanCalendarEvent {
   void updateGoogleCalendarEventId(String newId) {
     googleCalendarEventId = newId;
   }
-
 }
