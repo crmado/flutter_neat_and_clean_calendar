@@ -47,9 +47,19 @@ class NeatCleanCalendarEvent {
   });
 
   factory NeatCleanCalendarEvent.fromMap(Map<String, dynamic> data) {
-    final colorString = data['color'] as String;
-    final color =
-        Color(int.parse(colorString.substring(1, 7), radix: 16) + 0xFF000000);
+    if (data.isEmpty) {
+      return NeatCleanCalendarEvent.empty();
+    }
+    String summary = data['summary'] ?? '';
+    String description = data['description'] ?? '';
+    String location = data['location'] ?? '';
+    String? colorString;
+    if (data['color'] != null) {
+      colorString = data['color'] as String;
+    }
+    final color = (colorString != null)
+        ? Color(int.parse(colorString.substring(1, 7), radix: 16) + 0xFF000000)
+        : Colors.blue;
 
     DateTime parseDateTime(dynamic value) {
       if (value is Timestamp) {
@@ -60,9 +70,9 @@ class NeatCleanCalendarEvent {
       throw ArgumentError('Unsupported datetime type: ${value.runtimeType}');
     }
 
-    return NeatCleanCalendarEvent(data['summary'],
-        description: data['description'],
-        location: data['location'],
+    return NeatCleanCalendarEvent(summary,
+        description: description,
+        location: location,
         startTime: parseDateTime(data['startTime']),
         endTime: parseDateTime(data['endTime']),
         color: color,
